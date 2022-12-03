@@ -91,15 +91,15 @@ fn calculate_group_score (group: &Group) -> i32 {
     let group_2_string = group.ruck_2.compartment_1.contents.to_string() + &group.ruck_2.compartment_2.contents.to_string();
     let group_3_string = group.ruck_3.compartment_1.contents.to_string() + &group.ruck_3.compartment_2.contents.to_string();
 
-    for g1 in group_1_string.split("") {
-        for g2 in group_2_string.split("") {
+    for g1 in group_1_string.split("") {  
+        if g1 == "" { continue; }
 
-            if g1 != g2 || g1 == "" { continue; }
+        for g2 in group_2_string.split("") {
+            if g1 != g2 { continue; }
 
             for g3 in group_3_string.split("") {
-                if g1 == g3 && g2 == g3 {
-                    return get_letter_score(g1);
-                }
+                if g2 != g3 { continue; }
+                return get_letter_score(g1);
             }
         }
     }
@@ -116,9 +116,9 @@ fn get_group(ruck_sacks : &mut Vec<Rucksack>) -> Option<Group> {
             let elves_3 = &ruck_sacks.pop().unwrap();
             
             let group = Group {
-                ruck_1 : elves_1.clone(),
-                ruck_2 : elves_2.clone(),
-                ruck_3 : elves_3.clone(),
+                ruck_1 : elves_1.to_owned(),
+                ruck_2 : elves_2.to_owned(),
+                ruck_3 : elves_3.to_owned(),
             };
 
             Some(group)
