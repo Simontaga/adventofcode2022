@@ -2,6 +2,8 @@ use lazy_static::lazy_static;
 use std::fs::File;
 use std::io::prelude::*;
 use std::collections::HashMap;
+use std::thread;
+
 
 #[derive(Clone)]
 struct Rucksack {
@@ -65,21 +67,44 @@ pub fn day_3_part_1 () -> i32 {
 }
 
 pub fn day3_part_2() -> i32 {
-    let mut ruck_sacks = get_rucksacks();
-    let mut score = 0;
+    let ruck_sacks = get_rucksacks();
+    let mut first_half = ruck_sacks[..ruck_sacks.len()/2].to_vec();
+    let mut second_half = ruck_sacks[ruck_sacks.len()/2..].to_vec();
 
-    loop {
-        match get_group(&mut ruck_sacks) {
-            Some(group) => {
-                score += calculate_group_score(&group);
-            }
+    
+    let thread_1 = thread::spawn(move || {
+        let mut score = 0;
 
-            None => {
-                return score
-            }
-        }
+        loop {
+            match get_group(&mut first_half) {
+                Some(group) => {
+                    score += calculate_group_score(&group);
+                }
+    
+                None => {
+                    return score
+                }
+            } }
+    });
 
-    }
+    let thread_2 = thread::spawn(move || {
+        let mut score = 0;
+
+        loop {
+            match get_group(&mut second_half) {
+                Some(group) => {
+                    score += calculate_group_score(&group);
+                }
+    
+                None => {
+                    return score
+                }
+            } }
+    });
+
+    let thread_1_score = thread_1.join().unwrap();
+    let thread_2_score = thread_2.join().unwrap();
+    return thread_1_score + thread_2_score
 }
 
 // Truly a beauty 😎
