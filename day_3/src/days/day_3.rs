@@ -91,15 +91,15 @@ fn calculate_group_score (group: &Group) -> i32 {
     let group_2_string = group.ruck_2.compartment_1.contents.to_string() + &group.ruck_2.compartment_2.contents.to_string();
     let group_3_string = group.ruck_3.compartment_1.contents.to_string() + &group.ruck_3.compartment_2.contents.to_string();
 
-    for g1 in group_1_string.split("") {  
-        if g1 == "" { continue; }
+    for g1 in group_1_string.chars().into_iter() {  
+        if char::is_whitespace(g1) { continue; }
 
-        for g2 in group_2_string.split("") {
+        for g2 in group_2_string.chars().into_iter() {
             if g1 != g2 { continue; }
 
-            for g3 in group_3_string.split("") {
+            for g3 in group_3_string.chars().into_iter()  {
                 if g2 != g3 { continue; }
-                return get_letter_score(g1);
+                return get_letter_score(&g1.to_string());
             }
         }
     }
