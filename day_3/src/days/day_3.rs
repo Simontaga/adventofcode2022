@@ -1,9 +1,7 @@
 use lazy_static::lazy_static;
-
 use std::fs::File;
 use std::io::prelude::*;
 use std::collections::HashMap;
-
 
 #[derive(Clone)]
 struct Rucksack {
@@ -16,12 +14,12 @@ struct Compartment {
     contents: String
 }
 
-
 struct Group {
     ruck_1: Rucksack,
     ruck_2: Rucksack,
     ruck_3: Rucksack,
 }
+
 lazy_static! {
     static ref ALPHABET: HashMap<&'static str, i32> = HashMap::from([
         ("a", 1),
@@ -52,7 +50,6 @@ lazy_static! {
         ("z", 26)
     ]);
 }
-
 
 
 pub fn day_3_part_1 () -> i32 {
@@ -111,14 +108,10 @@ fn calculate_group_score (group: &Group) -> i32 {
 fn get_group(ruck_sacks : &mut Vec<Rucksack>) -> Option<Group> {
     match ruck_sacks.len() >= 3 {
         true => {
-            let elves_1 = &ruck_sacks.pop().unwrap();
-            let elves_2 = &ruck_sacks.pop().unwrap();
-            let elves_3 = &ruck_sacks.pop().unwrap();
-            
-            let group = Group {
-                ruck_1 : elves_1.to_owned(),
-                ruck_2 : elves_2.to_owned(),
-                ruck_3 : elves_3.to_owned(),
+            let group: Group = Group {
+                ruck_1 : ruck_sacks.pop().unwrap().to_owned(),
+                ruck_2 : ruck_sacks.pop().unwrap().to_owned(),
+                ruck_3 : ruck_sacks.pop().unwrap().to_owned(),
             };
 
             Some(group)
@@ -131,19 +124,13 @@ fn get_group(ruck_sacks : &mut Vec<Rucksack>) -> Option<Group> {
 }
 
 
-
 // Very nice
 fn calculate_rucksack_score (ruck_sack : Rucksack) -> i32 {
-    let compartment_1_letters: Vec<&str> = ruck_sack.compartment_1.contents.split("").collect();
-    let compartment_2_letters: Vec<&str> = ruck_sack.compartment_2.contents.split("").collect();
-
-
-   for c1 in &compartment_1_letters {
-        for c2 in &compartment_2_letters {
-
-            if c1 == c2 && c1 != &"" {
-                return get_letter_score(c1);
-            }
+   for c1 in ruck_sack.compartment_1.contents.chars().into_iter() {
+        if char::is_whitespace(c1) { continue; }
+        for c2 in ruck_sack.compartment_2.contents.chars().into_iter() {
+            if c1 != c2 { continue; }
+            return get_letter_score(&c1.to_string());            
         }
     } 
 
@@ -151,9 +138,7 @@ fn calculate_rucksack_score (ruck_sack : Rucksack) -> i32 {
 }
 
 
-
 fn get_letter_score (letter: &str) -> i32 {
-    // Purely genius
     match ALPHABET.contains_key(&letter) {
         true => {
             return *ALPHABET.get(*&letter).unwrap();
@@ -175,7 +160,6 @@ fn get_rucksacks () -> Vec<Rucksack> {
     for rucksack in lines {
         let lenght = rucksack.len();
 
-
         let first = Compartment {
             contents: rucksack[0..lenght/2].to_string()
         };
@@ -183,7 +167,6 @@ fn get_rucksacks () -> Vec<Rucksack> {
         let second = Compartment {
             contents: rucksack[lenght/2..].to_string()
         };
-
 
         let ruck: Rucksack = Rucksack {
             compartment_1: first,
