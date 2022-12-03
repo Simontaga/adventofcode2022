@@ -1,3 +1,5 @@
+use lazy_static::lazy_static;
+
 use std::fs::File;
 use std::io::prelude::*;
 use std::collections::HashMap;
@@ -20,6 +22,37 @@ struct Group {
     ruck_2: Rucksack,
     ruck_3: Rucksack,
 }
+lazy_static! {
+    static ref ALPHABET: HashMap<&'static str, i32> = HashMap::from([
+        ("a", 1),
+        ("b", 2),
+        ("c", 3),
+        ("d", 4),
+        ("e", 5),
+        ("f", 6),
+        ("g", 7),
+        ("h", 8),
+        ("i", 9),
+        ("j", 10),
+        ("k", 11),
+        ("l", 12),
+        ("m", 13),
+        ("n", 14),
+        ("o", 15),
+        ("p", 16),
+        ("q", 17),
+        ("r", 18),
+        ("s", 19),
+        ("t", 20),
+        ("u", 21),
+        ("v", 22),
+        ("w", 23),
+        ("x", 24),
+        ("y", 25),
+        ("z", 26)
+    ]);
+}
+
 
 
 pub fn day_3_part_1 () -> i32 {
@@ -60,8 +93,11 @@ fn calculate_group_score (group: &Group) -> i32 {
 
     for g1 in group_1_string.split("") {
         for g2 in group_2_string.split("") {
+
+            if g1 != g2 || g1 == "" { continue; }
+
             for g3 in group_3_string.split("") {
-                if g1 == g2 && g1 == g3 && g2 == g3 && g1 != "" {
+                if g1 == g3 && g2 == g3 {
                     return get_letter_score(g1);
                 }
             }
@@ -114,44 +150,17 @@ fn calculate_rucksack_score (ruck_sack : Rucksack) -> i32 {
     0
 }
 
+
+
 fn get_letter_score (letter: &str) -> i32 {
-    let alphabet: HashMap<&str, i32> = HashMap::from([
-        ("a", 1),
-        ("b", 2),
-        ("c", 3),
-        ("d", 4),
-        ("e", 5),
-        ("f", 6),
-        ("g", 7),
-        ("h", 8),
-        ("i", 9),
-        ("j", 10),
-        ("k", 11),
-        ("l", 12),
-        ("m", 13),
-        ("n", 14),
-        ("o", 15),
-        ("p", 16),
-        ("q", 17),
-        ("r", 18),
-        ("s", 19),
-        ("t", 20),
-        ("u", 21),
-        ("v", 22),
-        ("w", 23),
-        ("x", 24),
-        ("y", 25),
-        ("z", 26)
-    ]);
-    
     // Purely genius
-    match alphabet.contains_key(&letter) {
+    match ALPHABET.contains_key(&letter) {
         true => {
-            return alphabet[&letter];
+            return *ALPHABET.get(*&letter).unwrap();
         },
         false => {
             let lower = letter.to_lowercase();
-            return alphabet[&lower[..]] + alphabet.len() as i32;
+            return ALPHABET[&lower[..]] + 26 as i32;
         }
     }
 }
@@ -182,7 +191,6 @@ fn get_rucksacks () -> Vec<Rucksack> {
         };
 
         ruck_sack.push(ruck);
-
     }
 
     return ruck_sack;
