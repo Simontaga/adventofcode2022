@@ -88,13 +88,13 @@ fn calculate_group_score (group: &Group) -> i32 {
     let group_2_string = group.ruck_2.compartment_1.contents.to_string() + &group.ruck_2.compartment_2.contents.to_string();
     let group_3_string = group.ruck_3.compartment_1.contents.to_string() + &group.ruck_3.compartment_2.contents.to_string();
 
-    for g1 in group_1_string.chars().into_iter() {  
+    for g1 in group_1_string.chars() {  
         if char::is_whitespace(g1) { continue; }
 
-        for g2 in group_2_string.chars().into_iter() {
+        for g2 in group_2_string.chars() {
             if g1 != g2 { continue; }
 
-            for g3 in group_3_string.chars().into_iter()  {
+            for g3 in group_3_string.chars()  {
                 if g2 != g3 { continue; }
                 return get_letter_score(&g1.to_string());
             }
@@ -109,9 +109,9 @@ fn get_group(ruck_sacks : &mut Vec<Rucksack>) -> Option<Group> {
     match ruck_sacks.len() >= 3 {
         true => {
             let group: Group = Group {
-                ruck_1 : ruck_sacks.pop().unwrap().to_owned(),
-                ruck_2 : ruck_sacks.pop().unwrap().to_owned(),
-                ruck_3 : ruck_sacks.pop().unwrap().to_owned(),
+                ruck_1 : ruck_sacks.pop().unwrap(),
+                ruck_2 : ruck_sacks.pop().unwrap(),
+                ruck_3 : ruck_sacks.pop().unwrap(),
             };
 
             Some(group)
@@ -126,9 +126,9 @@ fn get_group(ruck_sacks : &mut Vec<Rucksack>) -> Option<Group> {
 
 // Very nice
 fn calculate_rucksack_score (ruck_sack : Rucksack) -> i32 {
-   for c1 in ruck_sack.compartment_1.contents.chars().into_iter() {
+   for c1 in ruck_sack.compartment_1.contents.chars() {
         if char::is_whitespace(c1) { continue; }
-        for c2 in ruck_sack.compartment_2.contents.chars().into_iter() {
+        for c2 in ruck_sack.compartment_2.contents.chars() {
             if c1 != c2 { continue; }
             return get_letter_score(&c1.to_string());            
         }
@@ -141,11 +141,11 @@ fn calculate_rucksack_score (ruck_sack : Rucksack) -> i32 {
 fn get_letter_score (letter: &str) -> i32 {
     match ALPHABET.contains_key(&letter) {
         true => {
-            return *ALPHABET.get(*&letter).unwrap();
+            return *ALPHABET.get(letter).unwrap();
         },
         false => {
             let lower = letter.to_lowercase();
-            return ALPHABET[&lower[..]] + 26 as i32;
+            ALPHABET[&lower[..]] + 26_i32
         }
     }
 }
@@ -153,7 +153,7 @@ fn get_letter_score (letter: &str) -> i32 {
 
 fn get_rucksacks () -> Vec<Rucksack> {
     let data: String = get_input();
-    let lines = data.split("\n");
+    let lines = data.split('\n');
 
     let mut ruck_sack: Vec<Rucksack> = Vec::new();
 
@@ -176,7 +176,7 @@ fn get_rucksacks () -> Vec<Rucksack> {
         ruck_sack.push(ruck);
     }
 
-    return ruck_sack;
+    ruck_sack
 }
 
 fn get_input () -> String {
