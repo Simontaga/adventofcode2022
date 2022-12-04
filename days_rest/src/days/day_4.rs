@@ -10,7 +10,7 @@ struct Pair {
 
 pub fn day4_part_1 () -> i32 {
     let data: String = get_input();
-    let lines = data.split('\n');
+    let lines = data.lines();
     let mut collisions = 0;
     
     let mut pairs: Vec<Pair> = Vec::new();
