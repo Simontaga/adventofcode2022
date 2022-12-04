@@ -56,14 +56,33 @@ lazy_static! {
 
 pub fn day_3_part_1 () -> i32 {
    
-    let rucksack = get_rucksacks();
-    let mut score: i32 = 0;
+    let ruck_sacks = get_rucksacks();
+    let first_half = ruck_sacks[..ruck_sacks.len()/2].to_vec();
+    let second_half = ruck_sacks[ruck_sacks.len()/2..].to_vec();
 
-    for ruck in rucksack {
-        score += calculate_rucksack_score(ruck);
-    }
+    let thread_1 = thread::spawn(move || {
+        let mut score = 0;
 
-    score
+        for ruck in first_half {
+            score += calculate_rucksack_score(ruck);
+        }
+
+        score
+    });
+
+    let thread_2 = thread::spawn(move || {
+        let mut score = 0;
+
+        for ruck in second_half {
+            score += calculate_rucksack_score(ruck);
+        }
+
+        score
+    });
+
+    
+
+    thread_1.join().unwrap() + thread_2.join().unwrap()
 }
 
 pub fn day3_part_2() -> i32 {
@@ -104,7 +123,7 @@ pub fn day3_part_2() -> i32 {
 
     let thread_1_score = thread_1.join().unwrap();
     let thread_2_score = thread_2.join().unwrap();
-    return thread_1_score + thread_2_score
+    thread_1_score + thread_2_score
 }
 
 // Truly a beauty 😎
