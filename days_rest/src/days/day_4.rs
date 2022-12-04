@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::prelude::*;
 use std::str::FromStr;
-use std::cmp;
+
 
 struct Pair {
     range1_start: i32,
@@ -51,15 +51,14 @@ pub fn day4_part_2() -> i32 {
     overlaps
 }
 
-
 fn get_pair(line: &str) -> Pair {
-    let split = line.split(",");
+    let split = line.split(',');
     let pairs: Vec<&str> = split.collect();
 
     let mut nums: Vec<i32> = Vec::new();
 
     for pair in pairs {
-        let split_pair: Vec<&str> = pair.split("-").collect();
+        let split_pair: Vec<&str> = pair.split('-').collect();
         nums.push(FromStr::from_str(split_pair[0]).unwrap());
         nums.push(FromStr::from_str(split_pair[1]).unwrap()); 
     }
@@ -68,13 +67,7 @@ fn get_pair(line: &str) -> Pair {
     Pair { range1_start: nums[0], range1_end: nums[1], range2_start: nums[2], range2_end: nums[3] }
 }
 
-
 fn get_input () -> String {
-    let mut file = File::open("src/days/input/4.txt").unwrap();
-
-    let mut buffer = String::new();
-
-    file.read_to_string(&mut buffer).unwrap();
-
-    buffer
+    let input = std::fs::read_to_string("src/days/input/4.txt").unwrap();
+    input
 }
