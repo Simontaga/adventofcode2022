@@ -1,6 +1,4 @@
 use lazy_static::lazy_static;
-use std::fs::File;
-use std::io::prelude::*;
 use std::collections::HashMap;
 use std::thread;
 
@@ -224,11 +222,5 @@ fn get_rucksacks () -> Vec<Rucksack> {
 }
 
 fn get_input () -> String {
-    let mut file = File::open("src/days/input/3.txt").unwrap();
-
-    let mut buffer = String::new();
-
-    file.read_to_string(&mut buffer).unwrap();
-
-    buffer
+    std::fs::read_to_string("src/days/input/3.txt").unwrap()
 }

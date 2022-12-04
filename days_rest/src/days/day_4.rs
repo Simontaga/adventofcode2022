@@ -1,5 +1,3 @@
-use std::fs::File;
-use std::io::prelude::*;
 use std::str::FromStr;
 
 
@@ -63,11 +61,9 @@ fn get_pair(line: &str) -> Pair {
         nums.push(FromStr::from_str(split_pair[1]).unwrap()); 
     }
     
-
     Pair { range1_start: nums[0], range1_end: nums[1], range2_start: nums[2], range2_end: nums[3] }
 }
 
 fn get_input () -> String {
-    let input = std::fs::read_to_string("src/days/input/4.txt").unwrap();
-    input
+    std::fs::read_to_string("src/days/input/4.txt").unwrap()
 }
