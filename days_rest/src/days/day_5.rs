@@ -13,7 +13,7 @@ pub fn day5_part_1() -> String {
 
     get_initial_crates(&mut crates, &lines,&mut instruction_line_start);
 
-    parse_instructions(&mut crates, &lines, &mut instruction_line_start);
+    parse_instructions(&mut crates, &lines, &mut instruction_line_start, false);
 
     let mut ans = String::from("");
     for container in crates {
@@ -36,7 +36,7 @@ pub fn day5_part_2 () -> String {
 
     get_initial_crates(&mut crates, &lines,&mut instruction_line_start);
 
-    parse_instructions_day_2(&mut crates, &lines, &mut instruction_line_start);
+    parse_instructions(&mut crates, &lines, &mut instruction_line_start, true);
 
     let mut ans = String::from("");
     for container in crates {
@@ -46,7 +46,7 @@ pub fn day5_part_2 () -> String {
     ans 
 }
 
-fn parse_instructions_day_2(containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, instr_line: &mut usize) {
+fn parse_instructions(containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, instr_line: &mut usize, day_2: bool) {
     for (index, line) in lines.iter().enumerate() {
         if index < *instr_line || line == &"" {
             continue;
@@ -57,7 +57,14 @@ fn parse_instructions_day_2(containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, 
         let from: i32 = instr[3].parse().unwrap();
         let to: i32 = instr[5].parse().unwrap();
 
-        let mut temp_vec: Vec<char> = Vec::new();
+        if !day_2 {
+            for b in 0..move_amount {
+
+                let temp = &containers[(from-1) as usize].pop().unwrap();
+                let _ = &containers[(to-1) as usize].push(*temp);
+            }
+        } else {
+            let mut temp_vec: Vec<char> = Vec::new();
 
         for b in 0..move_amount {
 
@@ -70,27 +77,8 @@ fn parse_instructions_day_2(containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, 
         for (i, t) in temp_vec.into_iter().enumerate() {
             &containers[(to-1) as usize].push(t);
         }
-    }
-} 
-
-
-fn parse_instructions(containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, instr_line: &mut usize) {
-    for (index, line) in lines.iter().enumerate() {
-        if index < *instr_line || line == &"" {
-            continue;
         }
 
-        let instr: Vec<&str> = line.split(char::is_whitespace).collect();
-        let move_amount: i32 = instr[1].parse().unwrap();
-        let from: i32 = instr[3].parse().unwrap();
-        let to: i32 = instr[5].parse().unwrap();
-
-
-        for b in 0..move_amount {
-
-            let temp = &containers[(from-1) as usize].pop().unwrap();
-            let _ = &containers[(to-1) as usize].push(*temp);
-        }
     }
 }
 
