@@ -23,6 +23,57 @@ pub fn day5_part_1() -> String {
     ans
 }
 
+pub fn day5_part_2 () -> String {
+    let data = get_input();
+    let lines: Vec<&str> = data.lines().collect();
+    let mut instruction_line_start: usize = 0;
+    let mut crates: Vec<Vec<char>> = Vec::new();
+    let amt = lines[0].len()/4;
+
+    for c in (0..amt+1) {
+        crates.push(Vec::new());
+    }
+
+    get_initial_crates(&mut crates, &lines,&mut instruction_line_start);
+
+    parse_instructions_day_2(&mut crates, &lines, &mut instruction_line_start);
+
+    let mut ans = String::from("");
+    for container in crates {
+        ans.push(*container.last().unwrap());
+    }
+
+    ans 
+}
+
+fn parse_instructions_day_2(containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, instr_line: &mut usize) {
+    for (index, line) in lines.iter().enumerate() {
+        if index < *instr_line || line == &"" {
+            continue;
+        }
+
+        let instr: Vec<&str> = line.split(char::is_whitespace).collect();
+        let move_amount: i32 = instr[1].parse().unwrap();
+        let from: i32 = instr[3].parse().unwrap();
+        let to: i32 = instr[5].parse().unwrap();
+
+        let mut temp_vec: Vec<char> = Vec::new();
+
+        for b in 0..move_amount {
+
+            let temp = &containers[(from-1) as usize].pop().unwrap();
+            //temp = &containers[(to-1) as usize].push(*temp);
+            temp_vec.push(*temp);
+        }
+        temp_vec.reverse();
+
+        for (i, t) in temp_vec.into_iter().enumerate() {
+            &containers[(to-1) as usize].push(t);
+        }
+    }
+} 
+
+
 fn parse_instructions(containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, instr_line: &mut usize) {
     for (index, line) in lines.iter().enumerate() {
         if index < *instr_line || line == &"" {
