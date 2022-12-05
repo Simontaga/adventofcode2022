@@ -7,7 +7,7 @@ pub fn day5_part_1() -> String {
     let mut crates: Vec<Vec<char>> = Vec::new();
     let amt = lines[0].len()/4;
 
-    for c in (0..amt+1) {
+    for _c in 0..amt+1 {
         crates.push(Vec::new());
     }
 
@@ -30,7 +30,7 @@ pub fn day5_part_2 () -> String {
     let mut crates: Vec<Vec<char>> = Vec::new();
     let amt = lines[0].len()/4;
 
-    for c in (0..amt+1) {
+    for _c in 0..amt+1 {
         crates.push(Vec::new());
     }
 
@@ -58,7 +58,7 @@ fn parse_instructions(containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, instr_
         let to: i32 = instr[5].parse().unwrap();
 
         if !day_2 {
-            for b in 0..move_amount {
+            for _b in 0..move_amount {
 
                 let temp = &containers[(from-1) as usize].pop().unwrap();
                 let _ = &containers[(to-1) as usize].push(*temp);
@@ -66,7 +66,7 @@ fn parse_instructions(containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, instr_
         } else {
             let mut temp_vec: Vec<char> = Vec::new();
 
-        for b in 0..move_amount {
+        for _b in 0..move_amount {
 
             let temp = &containers[(from-1) as usize].pop().unwrap();
             //temp = &containers[(to-1) as usize].push(*temp);
@@ -74,8 +74,8 @@ fn parse_instructions(containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, instr_
         }
         temp_vec.reverse();
 
-        for (i, t) in temp_vec.into_iter().enumerate() {
-            &containers[(to-1) as usize].push(t);
+        for (_i, t) in temp_vec.into_iter().enumerate() {
+            let _ = containers[(to-1) as usize].push(t);
         }
         }
 
@@ -85,7 +85,7 @@ fn parse_instructions(containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, instr_
 fn get_initial_crates (containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, instr_line: &mut usize) {
     for (line_index, line) in lines.iter().enumerate() {
         // stop if line contains numbers
-        if line.len() == 0 {
+        if line.is_empty() {
             *instr_line = line_index;
             break;
         }
@@ -94,7 +94,6 @@ fn get_initial_crates (containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, instr
 
         for (i, chunk) in chunks.iter().enumerate() {
             for char in chunk.chars() {
-                //println!("{}", char);
                 if char::is_alphabetic(char) {
                     containers[i].push(char);
                 }
