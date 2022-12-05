@@ -46,7 +46,7 @@ pub fn day5_part_2 () -> String {
     ans 
 }
 
-fn parse_instructions(containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, instr_line: &mut usize, day_2: bool) {
+fn parse_instructions(containers: &mut [Vec<char>], lines: &[&str], instr_line: &mut usize, day_2: bool) {
     for (index, line) in lines.iter().enumerate() {
         if index < *instr_line || line == &"" {
             continue;
@@ -82,7 +82,7 @@ fn parse_instructions(containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, instr_
     }
 }
 
-fn get_initial_crates (containers: &mut Vec<Vec<char>>, lines: &Vec<&str>, instr_line: &mut usize) {
+fn get_initial_crates (containers: &mut Vec<Vec<char>>, lines: &[&str], instr_line: &mut usize) {
     for (line_index, line) in lines.iter().enumerate() {
         // stop if line contains numbers
         if line.is_empty() {
