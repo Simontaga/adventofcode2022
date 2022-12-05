@@ -78,8 +78,6 @@ pub fn day_3_part_1 () -> i32 {
         score
     });
 
-    
-
     thread_1.join().unwrap() + thread_2.join().unwrap()
 }
 
@@ -195,7 +193,7 @@ fn get_letter_score (letter: &str) -> i32 {
 
 fn get_rucksacks () -> Vec<Rucksack> {
     let data: String = get_input();
-    let lines = data.split('\n');
+    let lines = data.lines();
 
     let mut ruck_sack: Vec<Rucksack> = Vec::new();
 
