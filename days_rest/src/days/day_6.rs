@@ -8,12 +8,9 @@ fn get_input() -> String { std::fs::read_to_string("src/days/input/6.txt").unwra
 
 
 fn get_index_unique(target: usize) -> i16 {
-    let characters: Vec<char> = get_input().chars().collect();
-
-    for (i, c) in characters.windows(target).enumerate() {
+    for (i, c) in get_input().chars().collect::<Vec<char>>().windows(target).enumerate() {
         if HashSet::<char>::from_iter(c.to_vec()).len() == target { return (i + target) as i16; }
     }
-
     0
 }
 
