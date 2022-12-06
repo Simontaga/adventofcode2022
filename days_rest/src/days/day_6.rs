@@ -1,32 +1,23 @@
 pub fn day6_part_1() -> i32 {
-    let data = get_input();
-    get_index_unique(data, 4)
-}
-
-fn get_index_unique(string: String, target: usize) -> i32 {
-    let mut unique: Vec<char> = Vec::new();
-    let characters: Vec<char> = string.chars().collect();
-
-    for i in 0..characters.len() {
-        for k in 0..target {
-            unique.push(*characters.get(i + k).unwrap());
-        }
-
-        unique.sort_unstable();
-        unique.dedup();
-
-        if unique.len() == target {
-            return (i + target) as i32;
-        }
-        unique.clear();
-    }
-
-    0
+    get_index_unique(4)
 }
 
 pub fn day6_part_2() -> i32 {
-    let data = get_input();
-    get_index_unique(data, 14)
+    get_index_unique(14)
+}
+
+fn get_index_unique(target: usize) -> i32 {
+    let characters: Vec<char> = get_input().chars().collect();
+
+    for i in 0..characters.len() {
+        let mut window: Vec<char> = characters[i..i + target].to_vec();
+        window.sort_unstable();
+        window.dedup();
+        if window.len() != target { continue; }
+        return (i + target) as i32;
+    }
+
+    0
 }
 
 fn get_input() -> String {
