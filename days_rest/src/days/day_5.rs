@@ -5,11 +5,9 @@ pub fn day5_part_1() -> String {
     let lines: Vec<&str> = data.lines().collect();
     let mut instruction_line_start: usize = 0;
     let mut crates: Vec<Vec<char>> = Vec::new();
-    let amt = lines[0].len()/4;
+    let len = lines[0].len()/4;
 
-    for _c in 0..amt+1 {
-        crates.push(Vec::new());
-    }
+    setup_container_vec(&mut crates, len);
 
     get_initial_crates(&mut crates, &lines,&mut instruction_line_start);
 
@@ -28,11 +26,9 @@ pub fn day5_part_2 () -> String {
     let lines: Vec<&str> = data.lines().collect();
     let mut instruction_line_start: usize = 0;
     let mut crates: Vec<Vec<char>> = Vec::new();
-    let amt = lines[0].len()/4;
+    let len = lines[0].len()/4;
 
-    for _c in 0..amt+1 {
-        crates.push(Vec::new());
-    }
+    setup_container_vec(&mut crates, len);
 
     get_initial_crates(&mut crates, &lines,&mut instruction_line_start);
 
@@ -44,6 +40,12 @@ pub fn day5_part_2 () -> String {
     }
 
     ans 
+}
+
+fn setup_container_vec(containers: &mut Vec<Vec<char>>, len: usize) {
+    for _c in 0..len+1 {
+        containers.push(Vec::new());
+    }
 }
 
 fn parse_instructions(containers: &mut [Vec<char>], lines: &[&str], instr_line: &mut usize, day_2: bool) {
@@ -69,7 +71,6 @@ fn parse_instructions(containers: &mut [Vec<char>], lines: &[&str], instr_line: 
         for _b in 0..move_amount {
 
             let temp = &containers[(from-1) as usize].pop().unwrap();
-            //temp = &containers[(to-1) as usize].push(*temp);
             temp_vec.push(*temp);
         }
         temp_vec.reverse();
@@ -84,7 +85,6 @@ fn parse_instructions(containers: &mut [Vec<char>], lines: &[&str], instr_line: 
 
 fn get_initial_crates (containers: &mut Vec<Vec<char>>, lines: &[&str], instr_line: &mut usize) {
     for (line_index, line) in lines.iter().enumerate() {
-        // stop if line contains numbers
         if line.is_empty() {
             *instr_line = line_index;
             break;

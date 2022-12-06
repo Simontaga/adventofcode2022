@@ -25,4 +25,8 @@ fn main() {
     let now = Instant::now();
     println!("Day 5 Part 2: {}", days::day_5::day5_part_2());
     println!("Took:{}ms", now.elapsed().as_millis());
+
+    let now = Instant::now();
+    println!("Day 6 Part 1: {}", days::day_6::day6_part_1());
+    println!("Took:{}ms", now.elapsed().as_millis());
 }
