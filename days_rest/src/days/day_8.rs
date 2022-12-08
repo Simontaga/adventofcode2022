@@ -9,24 +9,17 @@ struct Tree {
 
 pub fn day8_part_1() -> i32 {
     let input = get_input();
-    let lines = input.lines();
-    let mut trees: Vec<Tree> = Vec::new();
-
-    for (y, line) in lines.collect::<Vec<&str>>().into_iter().enumerate() {
-        for (x, height) in line.chars().enumerate() {
-            trees.push(Tree {
-                x: x as u32,
-                y: y as u32,
-                height: height.to_digit(10).unwrap(),
-            })
-        }
-    }
-    trees.reverse();
+    let trees: Vec<Tree> = get_trees(input);
     count_trees_visible(trees)
 }
 
 pub fn day8_part_2() -> i32 {
     let input = get_input();
+    let trees: Vec<Tree> = get_trees(input);
+    count_trees_scenic_score(trees)
+}
+
+fn get_trees(input: String) -> Vec<Tree> {
     let lines = input.lines();
     let mut trees: Vec<Tree> = Vec::new();
 
@@ -40,15 +33,15 @@ pub fn day8_part_2() -> i32 {
         }
     }
 
-    count_trees_scenic_score(trees)
+    trees
 }
 
-// Extremely inefficent, not blazingly fast.
 fn count_trees_visible(trees: Vec<Tree>) -> i32 {
     let trees_clone = trees.clone();
     let mut score = 0;
 
     for tree in trees {
+        
         // All trees higher or equal than the current one, to the right
         let right = trees_clone
             .iter()
@@ -82,7 +75,7 @@ fn count_trees_scenic_score(trees: Vec<Tree>) -> i32 {
     let mut score = 0;
 
     for tree in trees {
-        // Trees to the right at same Y until height is more or the same
+
         let right = trees_clone
             .iter()
             .filter(|x| x.x > tree.x && x.y == tree.y)
@@ -107,9 +100,7 @@ fn count_trees_scenic_score(trees: Vec<Tree>) -> i32 {
 
         let scenic_score = right.count() * left.count() * down.count() * up.count();
 
-        if scenic_score > score {
-            score = scenic_score;
-        }
+        if scenic_score > score { score = scenic_score; }
     }
 
     score as i32
