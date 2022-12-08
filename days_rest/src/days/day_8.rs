@@ -1,6 +1,6 @@
-use std::thread::Thread;
+
 use take_until::TakeUntilExt;
-use std::{thread, time};
+
 
 #[derive(Debug, Copy, Clone)]
 struct Tree {
@@ -34,10 +34,10 @@ pub fn day8_part_1() -> i32 {
 
 pub fn day8_part_2() -> i32 {
     let input = get_input();
-    let lines: Vec<&str> = input.lines().collect();
+    let lines = input.lines();
     let mut trees: Vec<Tree> = Vec::new();
 
-    for (y, line) in lines.into_iter().enumerate() {
+    for (y, line) in lines.collect::<Vec<&str>>().into_iter().enumerate() {
         for (x, height) in line.chars().enumerate() {
             trees.push(Tree {
                 x: x as u32,
@@ -51,36 +51,32 @@ pub fn day8_part_2() -> i32 {
 }
 
 // Extremely inefficent, not blazingly fast.
-fn count_trees_visible(trees: Vec<Tree>, max_y: u32, max_x: u32) -> i32 {
+fn count_trees_visible(trees: Vec<Tree>, _max_y: u32, _max_x: u32) -> i32 {
     let trees_clone = trees.clone();
     let mut score = 0;
 
     for tree in trees {
         // All trees higher or equal than the current one, to the right
-        let right: Vec<&Tree> = trees_clone
+        let right = trees_clone
             .iter()
-            .filter(|x| x.height >= tree.height && x.x > tree.x && x.y == tree.y)
-            .collect();
+            .filter(|x| x.height >= tree.height && x.x > tree.x && x.y == tree.y);
 
         // All trees higher or equal than the current one, to the left
-        let left: Vec<&Tree> = trees_clone
+        let left = trees_clone
             .iter()
-            .filter(|x| x.height >= tree.height && x.x < tree.x && x.y == tree.y)
-            .collect();
+            .filter(|x| x.height >= tree.height && x.x < tree.x && x.y == tree.y);
 
         // All trees higher or equal than the current one, upwards
-        let down: Vec<&Tree> = trees_clone
+        let down = trees_clone
             .iter()
-            .filter(|x| x.height >= tree.height && x.y > tree.y && x.x == tree.x)
-            .collect();
+            .filter(|x| x.height >= tree.height && x.y > tree.y && x.x == tree.x);
 
         // All trees higher or equal than the current one, downwards
-        let up: Vec<&Tree> = trees_clone
+        let up = trees_clone
             .iter()
-            .filter(|x| x.height >= tree.height && x.y < tree.y && x.x == tree.x)
-            .collect();
+            .filter(|x| x.height >= tree.height && x.y < tree.y && x.x == tree.x);
 
-        if up.len() == 0 || down.len() == 0 || left.len() == 0 || right.len() == 0 {
+        if up.count() == 0 || down.count() == 0 || left.count() == 0|| right.count() == 0 {
             score += 1;
         }
     }
@@ -94,33 +90,30 @@ fn count_trees_scenic_score(trees: Vec<Tree>) -> i32 {
 
     for tree in trees {
         // Trees to the right at same Y until height is more or the same
-        let right: Vec<&Tree> = trees_clone
+        let right = trees_clone
             .iter()
             .filter(|x| x.x > tree.x && x.y == tree.y)
-            .take_until(|x| x.height >= tree.height)
-            .collect();
+            .take_until(|x| x.height >= tree.height);
 
-        let left: Vec<&Tree> = trees_clone
+        let left = trees_clone
             .iter()
             .filter(|x| x.x < tree.x && x.y == tree.y)
             .rev()
-            .take_until(|x| x.height >= tree.height)
-            .collect();
+            .take_until(|x| x.height >= tree.height);
 
-        let down: Vec<&Tree> = trees_clone
+        let down = trees_clone
             .iter()
             .filter(|x| x.y > tree.y && x.x == tree.x)
-            .take_until(|x| x.height >= tree.height)
-            .collect();
+            .take_until(|x| x.height >= tree.height);
 
-        let up: Vec<&Tree> = trees_clone
+
+        let up = trees_clone
             .iter()
             .filter(|x| x.y < tree.y && x.x == tree.x)
             .rev()
-            .take_until(|x| x.height >= tree.height)
-            .collect();
+            .take_until(|x| x.height >= tree.height);
 
-        let scenic_score = right.len() * left.len() * down.len() * up.len();
+        let scenic_score = right.count() * left.count() * down.count() * up.count();
 
         if scenic_score > score {
             score = scenic_score;
