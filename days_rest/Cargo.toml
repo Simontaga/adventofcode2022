@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 lazy_static = "1.4.0"
 itertools = "0.10.5"
+take-until = "0.1.0"
